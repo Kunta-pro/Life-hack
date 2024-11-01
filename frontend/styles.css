@@ -1,72 +1,65 @@
+/* Basic Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body Styles */
 body {
     font-family: Arial, sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: #f4f4f4;
+    background-image: url('https://github.com/Kunta-pro/Kunta-pro/blob/main/Screenshot_20241030_225642_Google.jpg');
+    background-size: cover;
+    background-position: center;
+    color: #fff;
 }
 
+/* Container Styles */
 .container {
-    background-color: white;
+    background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent background */
     padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    text-align: center;
     width: 300px;
 }
 
-h1 {
-    text-align: center;
-}
-
-.role-toggle {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 15px;
-}
-
-.role-btn {
-    flex: 1;
+/* Input Styles */
+input[type="email"],
+input[type="password"],
+select {
+    width: 100%;
     padding: 10px;
-    margin: 0 5px;
+    margin: 10px 0;
     border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    background-color: #007bff;
+    border-radius: 5px;
+    background-color: #fff;
+    color: #000;
+    font-size: 16px;
+}
+
+/* Button Styles */
+button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #4CAF50; /* Green */
     color: white;
+    font-size: 16px;
+    cursor: pointer;
     transition: background-color 0.3s;
 }
 
-.role-btn.active {
-    background-color: #0056b3;
+button:hover {
+    background-color: #45a049; /* Darker green */
 }
 
-.login-form .input-group {
-    margin-bottom: 15px;
-}
-
-.login-form label {
-    display: block;
-    margin-bottom: 5px;
-}
-
-.login-form input {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-
-.login-form button {
-    width: 100%;
-    padding: 10px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.login-form button:hover {
-    background-color: #0056b3;
+/* Heading Styles */
+h1 {
+    margin-bottom: 20px;
 }
