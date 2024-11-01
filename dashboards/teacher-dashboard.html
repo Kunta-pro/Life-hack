@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Dashboard</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Link to external CSS file -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js/dist/supabase.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Teacher Dashboard</h1>
+        <button id="logout-btn">Logout</button>
+        <div>
+            <h2>Upload Marks for Students</h2>
+            <form id="upload-marks-form">
+                <input type="text" id="student-id" placeholder="Student ID" required>
+                <input type="number" id="marks" placeholder="Marks" required>
+                <button type="submit">Upload Marks</button>
+            </form>
+        </div>
+
+        <div>
+            <h2>View Students</h2>
+            <input type="text" id="search-student" placeholder="Search Student by Name">
+            <ul id="student-list"></ul>
+        </div>
+    </div>
+
+    <script>
+        const { createClient } = supabase;
+        const supabaseUrl = 'YOUR_SUPABASE_URL';
+        const supabaseKey = 'YOUR_SUPABASE_ANON_KEY';
+        const supabase = createClient(supabaseUrl, supabaseKey);
+
+        document.getElementById('logout-btn').addEventListener('click', async () => {
+            await supabase.auth.signOut();
+            window.location.href = 'index.html'; // Redirect to login page
+        });
+
+        document.getElementById('upload-marks-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const studentId = document.getElementById('student-id').value;
+            const marks = document.getElementById('marks').value;
+
+            const { data, error } = await supabase.from('marks').insert([{ student_id: studentId, marks }]);
+            if (error) {
+                alert(error.message);
+            } else {
+                alert('Marks uploaded successfully!');
+            }
+        });
+
+        document.getElementById('search-student').addEventListener('input', async () => {
+            const searchTerm = document.getElementById('search-student').value;
+            const { data: students } = await supabase.from('students').select().ilike('name', `%${searchTerm}%`);
+            const studentList = document.getElementById('student-list');
+            studentList.innerHTML = '';
+            students.forEach(student => {
+                const li = document.createElement('li');
+                li.textContent = `${student.name} (${student.email})`;
+                studentList.appendChild(li);
+            });
+        });
+    </script>
+</body>
+</html>
