@@ -51,13 +51,13 @@
                 document.getElementById('error-message').style.display = 'block';
             } else if (data && data.length > 0) {
                 const userRole = data[0].role;
-                console.log("User Role:", userRole); // Log the role to verify it is correctly fetched
+                console.log("User Role:", userRole);
 
                 // Redirect based on role
                 if (userRole === 'admin') {
-                    window.location.href = 'admin-dashboard.html';
+                    window.location.href = 'https://kunta-pro.github.io/Life-hack/admin-dashboard.html';
                 } else if (userRole === 'teacher') {
-                    window.location.href = 'teacher-dashboard.html';
+                    window.location.href = 'https://kunta-pro.github.io/Life-hack/teacher-dashboard.html';
                 }
             } else {
                 console.log("Invalid credentials or no data returned");
