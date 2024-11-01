@@ -5,52 +5,120 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register Student</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.0.0/dist/umd/supabase.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        h2 {
+            text-align: center;
+        }
+        form {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: auto;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+        input[type="text"],
+        input[type="number"],
+        input[type="date"],
+        input[type="tel"] {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .section-title {
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        .alert {
+            display: none;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 5px;
+        }
+        .alert.success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .alert.error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+    </style>
 </head>
 <body>
     <h2>Register Student</h2>
+    <div class="alert success" id="successAlert">Student registered successfully!</div>
+    <div class="alert error" id="errorAlert">An error occurred while registering the student. Please try again.</div>
     <form id="registerForm">
-        <h3>Biodata</h3>
+        <div class="section-title">Biodata</div>
         <label for="firstName">First Name:</label>
-        <input type="text" id="firstName" required><br>
-        
+        <input type="text" id="firstName" required>
+
         <label for="secondName">Second Name:</label>
-        <input type="text" id="secondName" required><br>
-        
+        <input type="text" id="secondName" required>
+
         <label for="age">Age:</label>
-        <input type="number" id="age" required><br>
-        
+        <input type="number" id="age" required>
+
         <label for="class">Class:</label>
-        <input type="text" id="class" required><br>
-        
+        <input type="text" id="class" required>
+
         <label for="dob">Date of Birth:</label>
-        <input type="date" id="dob" required><br>
-        
-        <h3>Parents Data</h3>
+        <input type="date" id="dob" required>
+
+        <div class="section-title">Parents Data</div>
         <label for="motherFirstName">Mother's First Name:</label>
-        <input type="text" id="motherFirstName" required><br>
-        
+        <input type="text" id="motherFirstName" required>
+
         <label for="motherSecondName">Mother's Second Name:</label>
-        <input type="text" id="motherSecondName" required><br>
-        
+        <input type="text" id="motherSecondName" required>
+
         <label for="motherTel">Mother's Tel Number:</label>
-        <input type="tel" id="motherTel" required><br>
-        
+        <input type="tel" id="motherTel" required>
+
         <label for="fatherFirstName">Father's First Name:</label>
-        <input type="text" id="fatherFirstName" required><br>
-        
+        <input type="text" id="fatherFirstName" required>
+
         <label for="fatherSecondName">Father's Second Name:</label>
-        <input type="text" id="fatherSecondName" required><br>
-        
+        <input type="text" id="fatherSecondName" required>
+
         <label for="fatherTel">Father's Tel Number:</label>
-        <input type="tel" id="fatherTel" required><br>
-        
-        <h3>Health History</h3>
+        <input type="tel" id="fatherTel" required>
+
+        <div class="section-title">Health History</div>
         <label for="healthHistory">Test All Systems:</label>
-        <input type="text" id="healthHistory" required><br>
-        
+        <input type="text" id="healthHistory" required>
+
         <label for="medication">Disease & Recommended Medication:</label>
-        <input type="text" id="medication" required><br><br>
-        
+        <input type="text" id="medication" required>
+
         <button type="submit">Submit</button>
     </form>
 
@@ -62,7 +130,6 @@
 
         document.getElementById('registerForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-
             const formData = {
                 first_name: document.getElementById('firstName').value,
                 second_name: document.getElementById('secondName').value,
@@ -88,11 +155,13 @@
                     throw error;
                 }
 
-                alert('Student registered successfully!');
+                document.getElementById('successAlert').style.display = 'block';
+                document.getElementById('errorAlert').style.display = 'none';
                 document.getElementById('registerForm').reset();
             } catch (error) {
                 console.error('Error registering student:', error.message);
-                alert('An error occurred while registering the student. Please try again.');
+                document.getElementById('errorAlert').style.display = 'block';
+                document.getElementById('successAlert').style.display = 'none';
             }
         });
     </script>
