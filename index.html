@@ -21,6 +21,7 @@
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             width: 300px;
+            position: relative; /* Positioning for animation */
             overflow: hidden; /* Ensure no overflow during animation */
         }
         input {
@@ -57,13 +58,12 @@
             transition: opacity 0.3s ease, transform 0.3s ease;
             position: absolute; /* Positioning for animation */
             width: 100%;
+            pointer-events: none; /* Prevent interaction when not active */
         }
         .login-form.active {
             opacity: 1;
             transform: translateY(0);
-        }
-        .hidden {
-            display: none; /* Hide the form when not active */
+            pointer-events: auto; /* Allow interaction when active */
         }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
@@ -83,7 +83,7 @@
         </div>
 
         <!-- Teacher Login Form -->
-        <div id="teacher-login" class="login-form hidden">
+        <div id="teacher-login" class="login-form">
             <form id="teacher-login-form">
                 <input type="email" id="teacher-email" placeholder="Teacher Email" required>
                 <input type="password" id="teacher-password" placeholder="Teacher Password" required>
@@ -113,12 +113,13 @@
                 
                 // Trigger reflow to enable animation
                 void teacherForm.offsetWidth; // This forces a reflow
-                teacherForm.classList.add('active');
+                teacherForm.class list.add('active');
             } else {
                 teacherForm.classList.remove('active');
                 adminForm.classList.remove('hidden');
                 
-                // Trigger reflow to enable animation void adminForm.offsetWidth; // This forces a reflow
+                // Trigger reflow to enable animation
+                void adminForm.offsetWidth; // This forces a reflow
                 adminForm.classList.add('active');
             }
             messageDiv.innerText = ''; // Clear any messages
