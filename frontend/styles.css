@@ -1,65 +1,45 @@
-/* Basic Reset */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-/* Body Styles */
 body {
-    font-family: Arial, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
     background-image: url('https://github.com/Kunta-pro/Kunta-pro/blob/main/Screenshot_20241030_225642_Google.jpg');
     background-size: cover;
-    background-position: center;
-    color: #fff;
+    font-family: Arial, sans-serif;
 }
 
-/* Container Styles */
-.container {
-    background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent background */
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    text-align: center;
+.login-container {
     width: 300px;
+    margin: 100px auto;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-/* Input Styles */
-input[type="email"],
-input[type="password"],
-select {
+h1 {
+    text-align: center;
+}
+
+label {
+    display: block;
+    margin: 10px 0 5px;
+}
+
+input, select {
     width: 100%;
-    padding: 10px;
-    margin: 10px 0;
-    border: none;
+    padding: 8px;
+    margin: 5px 0 10px;
+    border: 1px solid #ccc;
     border-radius: 5px;
-    background-color: #fff;
-    color: #000;
-    font-size: 16px;
 }
 
-/* Button Styles */
 button {
     width: 100%;
     padding: 10px;
+    background: #007BFF;
+    color: white;
     border: none;
     border-radius: 5px;
-    background-color: #4CAF50; /* Green */
-    color: white;
-    font-size: 16px;
     cursor: pointer;
-    transition: background-color 0.3s;
 }
 
 button:hover {
-    background-color: #45a049; /* Darker green */
-}
-
-/* Heading Styles */
-h1 {
-    margin-bottom: 20px;
+    background: #0056b3;
 }
