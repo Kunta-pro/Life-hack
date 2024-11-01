@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js/dist/supabase.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Login</h1>
+        <form id="login-form">
+            <input type="email" id="email" placeholder="Email" required>
+            <input type="password" id="password" placeholder="Password" required>
+            <select id="role">
+                <option value="admin">Admin</option>
+                <option value="teacher">Teacher</option>
+            </select>
+            <button type="submit">Login</button>
+        </form>
+    </div>
+
+    <script>
+        const { createClient } = supabase;
+        const supabaseUrl = 'YOUR_SUPABASE_URL';
+        const supabaseKey = 'YOUR_SUPABASE_ANON_KEY';
+        const supabase = createClient(supabaseUrl, supabaseKey);
+
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const role = document.getElementById('role').value;
+
+            // Sign in the user
+            const { user, error } = await supabase.auth.signIn({
+                email,
+                password,
+            });
+
+            if (error) {
+                alert(error.message);
+                return;
+            }
+
+            // Redirect to the appropriate dashboard based on the role
+            if (role === 'admin') {
+                window.location.href = 'admin-dashboard.html';
+            } else if (role === 'teacher') {
+                window.location.href = 'teacher-dashboard.html';
+            }
+        });
+    </script>
+</body>
+</html>
