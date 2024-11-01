@@ -5,82 +5,77 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register Student</title>
     <style>
-        /* Add styles here */
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        form { max-width: 500px; margin: auto; }
-        label, input, textarea { display: block; margin: 10px 0; }
+        body { font-family: Arial, sans-serif; }
+        form { max-width: 400px; margin: auto; }
+        input { display: block; margin-bottom: 10px; }
+        button { margin-top: 10px; }
+        .alert { display: none; padding: 10px; margin-top: 10px; }
+        .success { background-color: #d4edda; color: #155724; }
+        .error { background-color: #f8d7da; color: #721c24; }
     </style>
 </head>
 <body>
-    <h1>Register Student</h1>
-    <form id="registerForm">
-        <h2>Biodata</h2>
-        <label>First Name: <input type="text" id="firstName" required></label>
-        <label>Second Name: <input type="text" id="secondName" required></label>
-        <label>Age: <input type="number" id="age" required></label>
-        <label>Class: <input type="text" id="class" required></label>
-        <label>Date of Birth: <input type="date" id="dob" required></label>
 
-        <h2>Parent's Data</h2>
-        <label>Mother's First Name: <input type="text" id="motherFirstName" required></label>
-        <label>Mother's Second Name: <input type="text" id="motherSecondName" required></label>
-        <label>Mother's Tel: <input type="tel" id="motherTel" required></label>
-        <label>Father's First Name: <input type="text" id="fatherFirstName" required></label>
-        <label>Father's Second Name: <input type="text" id="fatherSecondName" required></label>
-        <label>Father's Tel: <input type="tel" id="fatherTel" required></label>
+<h1>Register Student</h1>
+<div id="successAlert" class="alert success">Student registered successfully!</div>
+<div id="errorAlert" class="alert error">Error registering student!</div>
 
-        <h2>Health History</h2>
-        <label>Health History: <textarea id="healthHistory"></textarea></label>
-        <label>Disease: <input type="text" id="disease"></label>
-        <label>Medication: <input type="text" id="medication"></label>
+<form id="registerForm">
+    <input type="text" id="firstName" placeholder="First Name" required>
+    <input type="text" id="secondName" placeholder="Second Name" required>
+    <input type="number" id="age" placeholder="Age" required>
+    <input type="text" id="class" placeholder="Class" required>
+    <input type="date" id="dob" placeholder="Date of Birth" required>
+    <input type="text" id="motherFirstName" placeholder="Mother's First Name" required>
+    <input type="text" id="motherSecondName" placeholder="Mother's Second Name" required>
+    <input type="text" id="motherTel" placeholder="Mother's Tel Number" required>
+    <input type="text" id="fatherFirstName" placeholder="Father's First Name" required>
+    <input type="text" id="fatherSecondName" placeholder="Father's Second Name" required>
+    <input type="text" id="fatherTel" placeholder="Father's Tel Number" required>
+    <textarea id="healthHistory" placeholder="Health History"></textarea>
+    <textarea id="medication" placeholder="Recommended Medication"></textarea>
+    <button type="submit">Submit</button>
+</form>
 
-        <button type="submit">Submit</button>
-    </form>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+<script>
+    const { createClient } = supabase;
+    const supabaseUrl = 'https://mokqpjrqgjlekuhybclo.supabase.co';
+    const supabaseKey = 'YOUR_SUPABASE_KEY'; // Replace with your actual key
+    const supabase = createClient(supabaseUrl, supabaseKey);
 
-    <script>
-        document.getElementById('registerForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
+    document.getElementById('registerForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const formData = {
+            first_name: document.getElementById('firstName').value,
+            second_name: document.getElementById('secondName').value,
+            age: parseInt(document.getElementById('age').value),
+            class: document.getElementById('class').value,
+            dob: document.getElementById('dob').value,
+            mother_first_name: document.getElementById('motherFirstName').value,
+            mother_second_name: document.getElementById('motherSecondName').value,
+            mother_tel: document.getElementById('motherTel').value,
+            father_first_name: document.getElementById('fatherFirstName').value,
+            father_second_name: document.getElementById('fatherSecondName').value,
+            father_tel: document.getElementById('fatherTel').value,
+            health_history: document.getElementById('healthHistory').value,
+            medication: document.getElementById('medication').value,
+        };
 
-            const studentData = {
-                firstName: document.getElementById('firstName').value,
-                secondName: document.getElementById('secondName').value,
-                age: parseInt(document.getElementById('age').value),
-                className: document.getElementById('class').value,
-                dob: document.getElementById('dob').value,
-                mother: {
-                    firstName: document.getElementById('motherFirstName').value,
-                    secondName: document.getElementById('motherSecondName').value,
-                    tel: document.getElementById('motherTel').value
-                },
-                father: {
-                    firstName: document.getElementById('fatherFirstName').value,
-                    secondName: document.getElementById('fatherSecondName').value,
-                    tel: document.getElementById('fatherTel').value
-                },
-                health: {
-                    history: document.getElementById('healthHistory').value,
-                    disease: document.getElementById('disease').value,
-                    medication: document.getElementById('medication').value
-                }
-            };
-
-            try {
-                const response = await fetch('http://localhost:3000/register-student', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(studentData)
-                });
-
-                if (response.ok) {
-                    alert('Student registered successfully');
-                } else {
-                    alert('Failed to register student');
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                alert('Error submitting form');
+        try {
+            const { data, error } = await supabase.from('students').insert([formData]);
+            if (error) {
+                throw error; // Handle error
             }
-        });
-    </script>
+            document.getElementById('successAlert').style.display = 'block';
+            document.getElementById('errorAlert').style.display = 'none';
+            document.getElementById('registerForm').reset();
+        } catch (error) {
+            console.error('Error registering student:', error.message);
+            document.getElementById('errorAlert').style.display = 'block';
+            document.getElementById('successAlert').style.display = 'none';
+        }
+    });
+</script>
 </body>
 </html>
