@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register Student</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        form { display: flex; flex-direction: column; }
+        label { margin-top: 10px; }
+        input, select, textarea { padding: 8px; margin-top: 5px; }
+        button { margin-top: 20px; padding: 10px; background-color: #4CAF50; color: white; border: none; cursor: pointer; }
+        button:hover { background-color: #45a049; }
+    </style>
+</head>
+<body>
+    <h1>Register Student</h1>
+    <form id="registerForm">
+        <h2>Biodata</h2>
+        <label for="firstName">First Name:</label>
+        <input type="text" id="firstName" required>
+
+        <label for="secondName">Second Name:</label>
+        <input type="text" id="secondName" required>
+
+        <label for="age">Age:</label>
+        <input type="number" id="age" required>
+
+        <label for="class">Class:</label>
+        <input type="text" id="class" required>
+
+        <label for="dob">Date of Birth:</label>
+        <input type="date" id="dob" required>
+
+        <h2>Parents' Data</h2>
+        <label for="motherFirstName">Mother's First Name:</label>
+        <input type="text" id="motherFirstName" required>
+
+        <label for="motherSecondName">Mother's Second Name:</label>
+        <input type="text" id="motherSecondName" required>
+
+        <label for="motherTel">Mother's Telephone Number:</label>
+        <input type="tel" id="motherTel" required>
+
+        <label for="fatherFirstName">Father's First Name:</label>
+        <input type="text" id="fatherFirstName" required>
+
+        <label for="fatherSecondName">Father's Second Name:</label>
+        <input type="text" id="fatherSecondName" required>
+
+        <label for="fatherTel">Father's Telephone Number:</label>
+        <input type="tel" id="fatherTel" required>
+
+        <h2>Health History</h2>
+        <label for="healthHistory">Test All Systems:</label>
+        <textarea id="healthHistory" rows="4" placeholder="Enter health history..." required></textarea>
+
+        <label for="disease">Disease:</label>
+        <input type="text" id="disease" placeholder="Enter any known disease">
+
+        <label for="medication">Recommended Medication:</label>
+        <input type="text" id="medication" placeholder="Enter recommended medication">
+
+        <button type="submit">Submit</button>
+    </form>
+
+    <script>
+        // Replace with your Supabase URL and API key
+        const supabaseUrl = 'https://your-supabase-url.supabase.co';
+        const supabaseKey = 'your-supabase-key';
+        const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+        document.getElementById('registerForm').addEventListener('submit', async function(event) {
+            event.preventDefault(); // Prevent form submission
+
+            // Collect form data
+            const studentData = {
+                first_name: document.getElementById('firstName').value,
+                second_name: document.getElementById('secondName').value,
+                age: document.getElementById('age').value,
+                class: document.getElementById('class').value,
+                dob: document.getElementById('dob').value,
+                mother_first_name: document.getElementById('motherFirstName').value,
+                mother_second_name: document.getElementById('motherSecondName').value,
+                mother_tel: document.getElementById('motherTel').value,
+                father_first_name: document.getElementById('fatherFirstName').value,
+                father_second_name: document.getElementById('fatherSecondName').value,
+                father_tel: document.getElementById('fatherTel').value,
+                health_history: document.getElementById('healthHistory').value,
+                disease: document.getElementById('disease').value,
+                medication: document.getElementById('medication').value,
+            };
+
+            // Post to Supabase
+            const { data, error } = await supabase
+                .from('students') // Replace with your table name
+                .insert([studentData]);
+
+            if (error) {
+                alert('Error registering student: ' + error.message);
+            } else {
+                alert('Student registered successfully!');
+                document.getElementById('registerForm').reset(); // Reset form after submission
+            }
+        });
+    </script>
+</body>
+</html>
