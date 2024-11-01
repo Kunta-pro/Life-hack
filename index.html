@@ -3,65 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Page</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@1.35.7/dist/umd/supabase.min.js"></script>
+    <title>Login</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.0.0/dist/umd/supabase.js"></script>
 </head>
 <body>
-    <div class="container">
-        <h2>Login</h2>
-        <form id="loginForm">
-            <div>
-                <label for="email">Email:</label>
-                <input type="email" id="email" required>
-            </div>
-            <div>
-                <label for="password">Password:</label>
-                <input type="password" id="password" required>
-            </div>
-            <div id="error-message" style="color: red; display: none;">Invalid credentials, please try again.</div>
-            <button type="submit">Login</button>
-        </form>
-    </div>
+    <h2>Login</h2>
+    <form id="loginForm">
+        <label for="email">Email:</label>
+        <input type="email" id="email" required><br><br>
+        <label for="password">Password:</label>
+        <input type="password" id="password" required><br><br>
+        <label for="role">Role:</label>
+        <select id="role" required>
+            <option value="admin">Admin</option>
+            <option value="teacher">Teacher</option>
+        </select><br><br>
+        <button type="submit">Login</button>
+    </form>
 
     <script>
-        // Initialize Supabase client
-        const SUPABASE_URL = 'https://mokqpjrqgjlekuhybclo.supabase.co';
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1va3FwanJxZ2psZWt1aHliY2xvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzAzMDYxOTAsImV4cCI6MjA0NTg4MjE5MH0.ziVCEj_ZxOLg49_srT-BWPlOhzm70ZMTZc64l-n5LSU';
-        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        const supabase = supabase.createClient(
+            'https://mokqpjrqgjlekuhybclo.supabase.co', 
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1va3FwanJxZ2psZWt1aHliY2xvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzAzMDYxOTAsImV4cCI6MjA0NTg4MjE5MH0.ziVCEj_ZxOLg49_srT-BWPlOhzm70ZMTZc64l-n5LSU'
+        );
 
-        document.getElementById('loginForm').addEventListener('submit', async (event) => {
-            event.preventDefault();
-            
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
+            const role = document.getElementById('role').value;
 
-            // Fetch user data based on email and password
-            const { data, error } = await supabase
-                .from('users')
-                .select('role')
-                .eq('email', email)
-                .eq('password', password);
-
-            console.log("Supabase response data:", data);
-            console.log("Supabase response error:", error);
+            const { data, error } = await supabase.auth.signInWithPassword({
+                email: email,
+                password: password,
+            });
 
             if (error) {
-                console.error('Login error:', error.message);
-                document.getElementById('error-message').style.display = 'block';
-            } else if (data && data.length > 0) {
-                const userRole = data[0].role;
-                console.log("User Role:", userRole);
+                alert('Login failed! Please check your credentials.');
+                console.error('Error:', error.message);
+                return;
+            }
 
-                // Redirect based on role
-                if (userRole === 'admin') {
-                    window.location.href = 'https://kunta-pro.github.io/Life-hack/admin-dashboard.html';
-                } else if (userRole === 'teacher') {
-                    window.location.href = 'https://kunta-pro.github.io/Life-hack/teacher-dashboard.html';
-                }
-            } else {
-                console.log("Invalid credentials or no data returned");
-                document.getElementById('error-message').style.display = 'block';
+            // Redirect based on role
+            if (role === 'admin') {
+                window.location.href = "https://kunta-pro.github.io/Life-hack/admin-dashboard.html";
+            } else if (role === 'teacher') {
+                window.location.href = "https://kunta-pro.github.io/Life-hack/teacher-dashboard.html";
             }
         });
     </script>
