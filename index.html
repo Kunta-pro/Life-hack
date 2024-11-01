@@ -4,24 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
             display: flex;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
             height: 100vh;
             margin: 0;
+            background-color: #f3f3f3;
         }
         .login-container {
             width: 300px;
             padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 10px;
+            background-color: white;
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
         }
         .login-container h2 {
+            margin-top: 0;
             text-align: center;
         }
         .login-container input[type="email"],
@@ -29,71 +30,80 @@
             width: 100%;
             padding: 10px;
             margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
         }
         .login-container button {
             width: 100%;
             padding: 10px;
-            background-color: #4CAF50;
-            color: white;
+            background-color: #007bff;
             border: none;
-            border-radius: 5px;
+            color: white;
+            border-radius: 4px;
+            font-size: 16px;
             cursor: pointer;
         }
         .login-container button:hover {
-            background-color: #45a049;
+            background-color: #0056b3;
+        }
+        .error-message {
+            color: red;
+            text-align: center;
+            display: none;
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
-    <div class="login-container">
-        <h2>Login</h2>
-        <form id="loginForm">
-            <input type="email" id="email" placeholder="Enter your email" required>
-            <input type="password" id="password" placeholder="Enter your password" required>
-            <button type="submit">Login</button>
-        </form>
-        <p id="error-message" style="color: red; text-align: center; display: none;">Invalid credentials, please try again.</p>
-    </div>
 
-    <script>
-        // Supabase Initialization
-        const SUPABASE_URL = 'https://mokqpjrqgjlekuhybclo.supabase.co';
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1va3FwanJxZ2psZWt1aHliY2xvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzAzMDYxOTAsImV4cCI6MjA0NTg4MjE5MH0.ziVCEj_ZxOLg49_srT-BWPlOhzm70ZMTZc64l-n5LSU';
-        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+<div class="login-container">
+    <h2>Login</h2>
+    <form id="loginForm">
+        <input type="email" id="email" placeholder="Email" required>
+        <input type="password" id="password" placeholder="Password" required>
+        <button type="submit">Login</button>
+        <p id="error-message" class="error-message">Invalid credentials. Please try again.</p>
+    </form>
+</div>
 
-        // Login Form Submission
-        document.getElementById('loginForm').addEventListener('submit', async (event) => {
-            event.preventDefault();
-            
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
+<!-- Supabase script -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@1.35.7/dist/umd/supabase.min.js"></script>
+<script>
+    // Initialize Supabase client
+    const SUPABASE_URL = 'https://mokqpjrqgjlekuhybclo.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1va3FwanJxZ2psZWt1aHliY2xvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzAzMDYxOTAsImV4cCI6MjA0NTg4MjE5MH0.ziVCEj_ZxOLg49_srT-BWPlOhzm70ZMTZc64l-n5LSU';
+    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-            // Fetch user data based on email and password
-            const { data, error } = await supabase
-                .from('users')
-                .select('role')
-                .eq('email', email)
-                .eq('password', password);
+    document.getElementById('loginForm').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
 
-            if (error) {
-                console.error('Login error:', error.message);
-                document.getElementById('error-message').style.display = 'block';
-            } else if (data && data.length > 0) {
-                const userRole = data[0].role;
-                
-                // Redirect based on user role
-                if (userRole === 'admin') {
-                    window.location.href = 'admin-dashboard.html';
-                } else if (userRole === 'teacher') {
-                    window.location.href = 'teacher-dashboard.html';
-                }
-            } else {
-                // Show error message if login fails
-                document.getElementById('error-message').style.display = 'block';
+        // Fetch user data based on email and password
+        const { data, error } = await supabase
+            .from('users')
+            .select('role')
+            .eq('email', email)
+            .eq('password', password);
+
+        if (error) {
+            console.error('Login error:', error.message);
+            document.getElementById('error-message').style.display = 'block';
+        } else if (data && data.length > 0) {
+            const userRole = data[0].role;
+
+            // Redirect based on role
+            if (userRole === 'admin') {
+                window.location.href = 'admin-dashboard.html';
+            } else if (userRole === 'teacher') {
+                window.location.href = 'teacher-dashboard.html';
             }
-        });
-    </script>
+        } else {
+            document.getElementById('error-message').style.display = 'block';
+        }
+    });
+</script>
+
 </body>
 </html>
