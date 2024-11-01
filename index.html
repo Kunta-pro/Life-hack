@@ -5,8 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <style>
-        /* CSS Styles */
-
+        /* Basic styles for the login form */
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
@@ -16,18 +15,14 @@
             height: 100vh;
             margin: 0;
         }
-
         .container {
             background: white;
             padding: 20px;
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            overflow: hidden; /* Ensure no overflow during animation */
         }
-
-        h1 {
-            margin-bottom: 20px;
-        }
-
         input {
             width: 100%;
             padding: 10px;
@@ -35,7 +30,6 @@
             border: 1px solid #ccc;
             border-radius: 5px;
         }
-
         button {
             width: 100%;
             padding: 10px;
@@ -45,14 +39,31 @@
             border-radius: 5px;
             cursor: pointer;
         }
-
-        button:hover {
-            background-color: #218838;
-        }
-
         #message {
             margin-top: 10px;
             color: red;
+        }
+        .toggle-button {
+            margin: 10px 0;
+            cursor: pointer;
+            color: #007bff;
+            text-decoration: underline;
+            display: block;
+            text-align: center;
+        }
+        .login-form {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            position: absolute; /* Positioning for animation */
+            width: 100%;
+        }
+        .login-form.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .hidden {
+            display: none; /* Hide the form when not active */
         }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
@@ -60,28 +71,64 @@
 <body>
     <div class="container">
         <h1>Login</h1>
-        <form id="login-form">
-            <input type="email" id="email" placeholder="Email" required>
-            <input type="password" id="password" placeholder="Password" required>
-            <button type="submit">Login</button>
-        </form>
+
+        <!-- Admin Login Form -->
+        <div id="admin-login" class="login-form active">
+            <form id="admin-login-form">
+                <input type="email" id="admin-email" placeholder="Admin Email" required>
+                <input type="password" id="admin-password" placeholder="Admin Password" required>
+                <button type="submit">Login as Admin</button>
+            </form>
+            <div class="toggle-button" onclick="toggleForms('teacher')">Login as Teacher</div>
+        </div>
+
+        <!-- Teacher Login Form -->
+        <div id="teacher-login" class="login-form hidden">
+            <form id="teacher-login-form">
+                <input type="email" id="teacher-email" placeholder="Teacher Email" required>
+                <input type="password" id="teacher-password" placeholder="Teacher Password" required>
+                <button type="submit">Login as Teacher</button>
+            </form>
+            <div class="toggle-button" onclick="toggleForms('admin')">Login as Admin</div>
+        </div>
+
         <div id="message"></div>
     </div>
 
     <script>
-        // JavaScript Logic
-
         // Initialize Supabase
-        const supabaseUrl = 'https://mokqpjrqgjlekuhybclo.supabase.co'; // Replace with your Supabase URL
+        const supabaseUrl = 'https://mokqpjrqgjlekuhybclo.supabase.co'; // Your Supabase URL
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1va3FwanJxZ2psZWt1aHliY2xvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzAzMDYxOTAsImV4cCI6MjA0NTg4MjE5MH0.ziVCEj_ZxOLg49_srT-BWPlOhzm70ZMTZc64l-n5LSU'; // Replace with your Supabase Anon Key
         const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
-        // Handle login form submission
-        document.getElementById('login-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
+        // Toggle between Admin and Teacher login forms
+        function toggleForms(role) {
+            const adminForm = document.getElementById('admin-login');
+            const teacherForm = document.getElementById('teacher-login');
+            const messageDiv = document.getElementById('message');
 
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
+            if (role === 'teacher') {
+                adminForm.classList.remove('active');
+                teacherForm.classList.remove('hidden');
+                
+                // Trigger reflow to enable animation
+                void teacherForm.offsetWidth; // This forces a reflow
+                teacherForm.classList.add('active');
+            } else {
+                teacherForm.classList.remove('active');
+                adminForm.classList.remove('hidden');
+                
+                // Trigger reflow to enable animation void adminForm.offsetWidth; // This forces a reflow
+                adminForm.classList.add('active');
+            }
+            messageDiv.innerText = ''; // Clear any messages
+        }
+
+        // Handle Admin login form submission
+        document.getElementById('admin-login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('admin-email').value;
+            const password = document.getElementById('admin-password').value;
 
             // Sign in the user
             const { data, error } = await supabase.auth.signInWithPassword({
@@ -91,29 +138,29 @@
 
             if (error) {
                 document.getElementById('message').innerText = error.message;
-                return;
-            }
-
-            // Check user role
-            const user = supabase.auth.user();
-            const { data: userData, error: roleError } = await supabase
-                .from('profiles') // Assuming you have a 'profiles' table
-                .select('user_role')
-                .eq('id', user.id)
-                .single();
-
-            if (roleError) {
-                document.getElementById('message').innerText = roleError.message;
-                return;
-            }
-
-            // Redirect based on role
-            if (userData.user_role === 'admin') {
-                window.location.href = 'https://kunta-pro.github.io/Life-hack/admin-dashboard.html'; // Redirect to admin dashboard
-            } else if (userData.user_role === 'teacher') {
-                window.location.href = 'https://kunta-pro.github.io/Life-hack/teacher-dashboard.html'; // Redirect to teacher dashboard
             } else {
-                document.getElementById('message').innerText = 'Access denied: insufficient permissions.';
+                // Redirect to admin dashboard
+                window.location.href = '/admin-dashboard';
+            }
+        });
+
+        // Handle Teacher login form submission
+        document.getElementById('teacher-login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('teacher-email').value;
+            const password = document.getElementById('teacher-password').value;
+
+            // Sign in the user
+            const { data, error } = await supabase.auth.signInWithPassword({
+                email,
+                password,
+            });
+
+            if (error) {
+                document.getElementById('message').innerText = error.message;
+            } else {
+                // Redirect to teacher dashboard
+                window.location.href = '/teacher-dashboard';
             }
         });
     </script>
