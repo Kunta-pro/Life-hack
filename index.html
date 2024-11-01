@@ -4,54 +4,92 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.0.0/dist/umd/supabase.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .container { max-width: 400px; margin: auto; }
+        .form-container { display: none; }
+        .form-container.active { display: block; }
+        .toggle-button { margin-top: 20px; cursor: pointer; color: blue; text-decoration: underline; }
+        .alert { display: none; padding: 10px; margin-top: 10px; }
+        .success { background-color: #d4edda; color: #155724; }
+        .error { background-color: #f8d7da; color: #721c24; }
+    </style>
 </head>
 <body>
-    <h2>Login</h2>
-    <form id="loginForm">
-        <label for="email">Email:</label>
-        <input type="email" id="email" required><br><br>
-        <label for="password">Password:</label>
-        <input type="password" id="password" required><br><br>
-        <label for="role">Role:</label>
-        <select id="role" required>
-            <option value="admin">Admin</option>
-            <option value="teacher">Teacher</option>
-        </select><br><br>
-        <button type="submit">Login</button>
-    </form>
 
-    <script>
-        const supabase = supabase.createClient(
-            'https://mokqpjrqgjlekuhybclo.supabase.co', 
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1va3FwanJxZ2psZWt1aHliY2xvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzAzMDYxOTAsImV4cCI6MjA0NTg4MjE5MH0.ziVCEj_ZxOLg49_srT-BWPlOhzm70ZMTZc64l-n5LSU'
-        );
+<div class="container">
+    <h1>Login</h1>
 
-        document.getElementById('loginForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
+    <div id="adminLogin" class="form-container active">
+        <h2>Admin Login</h2>
+        <div id="successAlertAdmin" class="alert success">Login successful!</div>
+        <div id="errorAlertAdmin" class="alert error">Error logging in!</div>
+        <form id="adminLoginForm">
+            <input type="email" id="adminEmail" placeholder="Admin Email" required>
+            <input type="password" id="adminPassword" placeholder="Password" required>
+            <button type="submit">Login as Admin</button>
+        </form>
+        <span class="toggle-button" onclick="toggleForms()">Switch to Teacher Login</span>
+    </div>
 
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const role = document.getElementById('role').value;
+    <div id="teacherLogin" class="form-container">
+        <h2>Teacher Login</h2>
+        <div id="successAlertTeacher" class="alert success">Login successful!</div>
+        <div id="errorAlertTeacher" class="alert error">Error logging in!</div>
+        <form id="teacherLoginForm">
+            <input type="email" id="teacherEmail" placeholder="Teacher Email" required>
+            <input type="password" id="teacherPassword" placeholder="Password" required>
+            <button type="submit">Login as Teacher</button>
+        </form>
+        <span class="toggle-button" onclick="toggleForms()">Switch to Admin Login</span>
+    </div>
+</div>
 
-            const { data, error } = await supabase.auth.signInWithPassword({
-                email: email,
-                password: password,
-            });
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+<script>
+    const { createClient } = supabase;
+    const supabaseUrl = 'https://mokqpjrqgjlekuhybclo.supabase.co';
+    const supabaseKey = 'YOUR_SUPABASE_KEY'; // Replace with your actual key
+    const supabase = createClient(supabaseUrl, supabaseKey);
 
-            if (error) {
-                alert('Login failed! Please check your credentials.');
-                console.error('Error:', error.message);
-                return;
-            }
+    function toggleForms() {
+        const adminLogin = document.getElementById('adminLogin');
+        const teacherLogin = document.getElementById('teacherLogin');
+        adminLogin.classList.toggle('active');
+        teacherLogin.classList.toggle('active');
+    }
 
-            // Redirect based on role
-            if (role === 'admin') {
-                window.location.href = "https://kunta-pro.github.io/Life-hack/admin-dashboard.html";
-            } else if (role === 'teacher') {
-                window.location.href = "https://kunta-pro.github.io/Life-hack/teacher-dashboard.html";
-            }
-        });
-    </script>
+    document.getElementById('adminLoginForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('adminEmail').value;
+        const password = document.getElementById('adminPassword').value;
+
+        const { user, error } = await supabase.auth.signIn({ email, password });
+
+        if (error) {
+            document.getElementById('errorAlertAdmin').style.display = 'block';
+            console.error('Admin login error:', error.message);
+        } else {
+            document.getElementById('successAlertAdmin').style.display = 'block';
+            window.location.href = 'https://kunta-pro.github.io/Life-hack/admin-dashboard.html'; // Redirect to Admin Dashboard
+        }
+    });
+
+    document.getElementById('teacherLoginForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('teacherEmail').value;
+        const password = document.getElementById('teacherPassword').value;
+
+        const { user, error } = await supabase.auth.signIn({ email, password });
+
+        if (error) {
+            document.getElementById('errorAlertTeacher').style.display = 'block';
+            console.error('Teacher login error:', error.message);
+        } else {
+            document.getElementById('successAlertTeacher').style.display = 'block';
+            window.location.href = 'https://kunta-pro.github.io/Life-hack/teacher-dashboard.html'; // Redirect to Teacher Dashboard
+        }
+    });
+</script>
 </body>
 </html>
