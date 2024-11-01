@@ -4,63 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Teacher Dashboard</title>
-    <link rel="stylesheet" href="styles.css"> <!-- Link to external CSS file -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js/dist/supabase.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        nav { background-color: #333; padding: 10px; }
+        nav a { color: white; padding: 10px 15px; text-decoration: none; }
+        nav a:hover { background-color: #575757; }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Teacher Dashboard</h1>
-        <button id="logout-btn">Logout</button>
-        <div>
-            <h2>Upload Marks for Students</h2>
-            <form id="upload-marks-form">
-                <input type="text" id="student-id" placeholder="Student ID" required>
-                <input type="number" id="marks" placeholder="Marks" required>
-                <button type="submit">Upload Marks</button>
-            </form>
-        </div>
+    <nav>
+        <p>Welcome to Teacher's Dashboard</p>
+        <a href="#" id="uploadMarks">Upload Student Marks</a>
+    </nav>
 
-        <div>
-            <h2>View Students</h2>
-            <input type="text" id="search-student" placeholder="Search Student by Name">
-            <ul id="student-list"></ul>
-        </div>
-    </div>
+    <h1>Teacher Dashboard</h1>
 
     <script>
-        const { createClient } = supabase;
-        const supabaseUrl = 'https://mokqpjrqgjlekuhybclo.supabase.co';
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1va3FwanJxZ2psZWt1aHliY2xvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzAzMDYxOTAsImV4cCI6MjA0NTg4MjE5MH0.ziVCEj_ZxOLg49_srT-BWPlOhzm70ZMTZc64l-n5LSU';
-        const supabase = createClient(supabaseUrl, supabaseKey);
-
-        document.getElementById('logout-btn').addEventListener('click', async () => {
-            await supabase.auth.signOut();
-            window.location.href = 'index.html'; // Redirect to login page
-        });
-
-        document.getElementById('upload-marks-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const studentId = document.getElementById('student-id').value;
-            const marks = document.getElementById('marks').value;
-
-            const { data, error } = await supabase.from('marks').insert([{ student_id: studentId, marks }]);
-            if (error) {
-                alert(error.message);
-            } else {
-                alert('Marks uploaded successfully!');
-            }
-        });
-
-        document.getElementById('search-student').addEventListener('input', async () => {
-            const searchTerm = document.getElementById('search-student').value;
-            const { data: students } = await supabase.from('students').select().ilike('name', `%${searchTerm}%`);
-            const studentList = document.getElementById('student-list');
-            studentList.innerHTML = '';
-            students.forEach(student => {
-                const li = document.createElement('li');
-                li.textContent = `${student.name} (${student.email})`;
-                studentList.appendChild(li);
-            });
+        document.getElementById('uploadMarks').addEventListener('click', function() {
+            // Implement the upload student marks functionality (e.g., show form or redirect)
+            alert("Implement the upload student marks functionality here.");
         });
     </script>
 </body>
