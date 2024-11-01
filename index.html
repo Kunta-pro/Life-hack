@@ -4,34 +4,94 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .login-container {
+            width: 300px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        .login-container h2 {
+            text-align: center;
+        }
+        .login-container input[type="email"],
+        .login-container input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .login-container button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .login-container button:hover {
+            background-color: #45a049;
+        }
+    </style>
 </head>
 <body>
-    <h1>Login</h1>
-    <form id="loginForm">
-        <input type="text" id="username" placeholder="Username" required>
-        <input type="password" id="password" placeholder="Password" required>
-        <select id="role" required>
-            <option value="">Select Role</option>
-            <option value="admin">Admin</option>
-            <option value="teacher">Teacher</option>
-        </select>
-        <button type="submit">Login</button>
-    </form>
+    <div class="login-container">
+        <h2>Login</h2>
+        <form id="loginForm">
+            <input type="email" id="email" placeholder="Enter your email" required>
+            <input type="password" id="password" placeholder="Enter your password" required>
+            <button type="submit">Login</button>
+        </form>
+        <p id="error-message" style="color: red; text-align: center; display: none;">Invalid credentials, please try again.</p>
+    </div>
 
     <script>
-        document.getElementById('loginForm').addEventListener('submit', function(event) {
-            event.preventDefault(); // Prevent form submission
+        // Supabase Initialization
+        const SUPABASE_URL = 'https://mokqpjrqgjlekuhybclo.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1va3FwanJxZ2psZWt1aHliY2xvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzAzMDYxOTAsImV4cCI6MjA0NTg4MjE5MH0.ziVCEj_ZxOLg49_srT-BWPlOhzm70ZMTZc64l-n5LSU';
+        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-            // Get the selected role
-            const role = document.getElementById('role').value;
+        // Login Form Submission
+        document.getElementById('loginForm').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
 
-            // Redirect based on role
-            if (role === 'admin') {
-                window.location.href = 'admin-dashboard.html'; // Redirect to admin dashboard
-            } else if (role === 'teacher') {
-                window.location.href = 'teacher-dashboard.html'; // Redirect to teacher dashboard
+            // Fetch user data based on email and password
+            const { data, error } = await supabase
+                .from('users')
+                .select('role')
+                .eq('email', email)
+                .eq('password', password);
+
+            if (error) {
+                console.error('Login error:', error.message);
+                document.getElementById('error-message').style.display = 'block';
+            } else if (data && data.length > 0) {
+                const userRole = data[0].role;
+                
+                // Redirect based on user role
+                if (userRole === 'admin') {
+                    window.location.href = 'admin-dashboard.html';
+                } else if (userRole === 'teacher') {
+                    window.location.href = 'teacher-dashboard.html';
+                }
             } else {
-                alert('Please select a role!');
+                // Show error message if login fails
+                document.getElementById('error-message').style.display = 'block';
             }
         });
     </script>
