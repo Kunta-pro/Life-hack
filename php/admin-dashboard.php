@@ -1,14 +1,21 @@
-<h1>Admin Dashboard</h1>
-<h2>Register Student</h2>
-<form action="register_student.php" method="POST">
-    <input type="text" name="name" required placeholder="Student Name">
-    <input type="email" name="email" required placeholder="Student Email">
-    <button type="submit">Register Student</button>
-</form>
+<?php
+session_start();
+require 'config.php';
 
-<h2>Manage Students</h2>
-<ul>
-    <?php foreach ($students as $student): ?>
-        <li><?php echo $student['name']; ?> (<?php echo $student['email']; ?>)</li>
-    <?php endforeach; ?>
-</ul>
+// Admin dashboard code
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Admin Dashboard</title>
+</head>
+<body>
+    <h1>Admin Dashboard</h1>
+    <button onclick="location.href='register-student.php'">Register Student</button>
+    <button onclick="location.href='manage-teachers.php'">Manage Teachers</button>
+    <button onclick="location.href='manage-students.php'">Manage Students</button>
+</body>
+</html>
