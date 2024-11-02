@@ -166,7 +166,7 @@
     <script>
         // Initialize Supabase
         const supabaseUrl = 'https://mokqpjrqgjlekuhybclo.supabase.co';
-        const supabaseKey = 'your-supabase-key'; // Replace with your actual Supabase key
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1va3FwanJxZ2psZWt1aHliY2xvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzAzMDYxOTAsImV4cCI6MjA0NTg4MjE5MH0.ziVCEj_ZxOLg49_srT-BWPlOhzm70ZMTZc64l-n5LSU'; // Replace with your actual Supabase key
         const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
         // Listen for authentication state changes
@@ -179,9 +179,9 @@
                 if (userRole === 'student') {
                     window.location.href = 'https://yourdomain.com/student-dashboard';
                 } else if (userRole === 'teacher') {
-                    window.location.href = 'https://yourdomain.com/teacher-dashboard';
+                    window.location.href = 'https://kunta-pro.github.io/Life-hack/teacher-dashboard.html';
                 } else if (userRole === 'admin') {
-                    window.location.href = 'https://yourdomain.com/admin-dashboard';
+                    window.location.href = 'https://kunta-pro.github.io/Life-hack/admin-dashboard.html';
                 }
             }
         });
