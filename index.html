@@ -22,13 +22,13 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.6); /* Dark overlay */
+            background-color: rgba(0, 0, 0, 0.6);
             z-index: 1;
         }
         .container {
             position: relative;
             z-index: 2;
-            background: rgba(255, 255, 255, 0.15); /* Translucent white background */
+            background: rgba(255, 255, 255, 0.15);
             padding: 30px 20px;
             border-radius: 10px;
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
@@ -36,7 +36,7 @@
             max-width: 400px;
             box-sizing: border-box;
             text-align: center;
-            backdrop-filter: blur(10px); /* Frosted glass effect */
+            backdrop-filter: blur(10px);
             color: #ffffff;
         }
         h1 {
@@ -51,46 +51,32 @@
             margin: 10px 0 5px;
             color: #ffffff;
         }
-        input {
+        input, button {
             width: 100%;
             padding: 10px;
             margin: 5px 0;
             border: 1px solid #ccc;
             border-radius: 5px;
-            font-size: 0.9em;
             box-sizing: border-box;
-            background-color: #333; /* Darker input background */
-            color: #ffffff; /* White text for contrast */
-        }
-        button {
-            width: 100%;
-            padding: 10px;
-            margin: 15px 0;
-            background-color: #007bff;
+            background-color: #333;
             color: #ffffff;
-            border: none;
-            border-radius: 5px;
-            font-size: 1em;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
         }
         button:hover {
-            background-color: #0056b3; /* Darker shade on hover */
+            background-color: #0056b3;
         }
         #message {
             margin-top: 10px;
-            color: #ff4c4c; /* Bright red for error messages */
+            color: #ff4c4c;
             text-align: center;
         }
-        .toggle-button {
-            margin: 10px 0;
+        .toggle-button, .forgot-password {
             cursor: pointer;
-            color: #00aaff; /* Light blue link color */
+            color: #00aaff;
             text-decoration: underline;
-            text-align: center;
             font-size: 0.9em;
+            margin-top: 10px;
         }
-        .login-form {
+        .login-form, .signup-form {
             opacity: 0;
             transform: translateY(20px);
             transition: opacity 0.3s ease, transform 0.3s ease;
@@ -98,66 +84,50 @@
             width: 100%;
             pointer-events: none;
         }
-        .login-form.active {
+        .login-form.active, .signup-form.active {
             opacity: 1;
             transform: translateY(0);
             pointer-events: auto;
         }
-        .remember-me {
-            display: flex;
-            align-items: center;
-            font-size: 0.85em;
-            justify-content: flex-start;
-            color: #ffffff;
-        }
-        .forgot-password {
-            text-align: center;
-            margin-top: 5px;
-            color: #00aaff;
-            text-decoration: underline;
-            cursor: pointer;
-            font-size: 0.85em;
-        }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+    <script defer src="https://cdn.userfront.com/@userfront/toolkit@latest/dist/web-component.umd.js"></script>
 </head>
 <body>
     <div class="overlay"></div>
     <div class="container">
         <h1>Login</h1>
 
-        <!-- Admin Login Form -->
+        <!-- Supabase Admin Login Form -->
         <div id="admin-login" class="login-form active">
             <form id="admin-login-form">
                 <label for="admin-email">Admin Email</label>
                 <input type="email" id="admin-email" placeholder="Admin Email" required>
                 <label for="admin-password">Admin Password</label>
                 <input type="password" id="admin-password" placeholder="Admin Password" required>
-                <div class="remember-me">
-                    <input type="checkbox" id="admin-remember">
-                    <label for="admin-remember">Remember Me</label>
-                </div>
                 <button type="submit">Login as Admin</button>
-                <div class="forgot-password" onclick="forgotPassword('admin')">Forgot Password?</div>
+                <div class="toggle-button" onclick="toggleForms('teacher')">Login as Teacher</div>
             </form>
-            <div class="toggle-button" onclick="toggleForms('teacher')">Login as Teacher</div>
+            <div class="forgot-password" onclick="forgotPassword('admin')">Forgot Password?</div>
         </div>
 
-        <!-- Teacher Login Form -->
+        <!-- Supabase Teacher Login Form -->
         <div id="teacher-login" class="login-form">
             <form id="teacher-login-form">
                 <label for="teacher-email">Teacher Email</label>
                 <input type="email" id="teacher-email" placeholder="Teacher Email" required>
                 <label for="teacher-password">Teacher Password</label>
                 <input type="password" id="teacher-password" placeholder="Teacher Password" required>
-                <div class="remember-me">
-                    <input type="checkbox" id="teacher-remember">
-                    <label for="teacher-remember">Remember Me</label>
-                </div>
                 <button type="submit">Login as Teacher</button>
-                <div class="forgot-password" onclick="forgotPassword('teacher')">Forgot Password?</div>
+                <div class="toggle-button" onclick="toggleForms('admin')">Login as Admin</div>
             </form>
-            <div class="toggle-button" onclick="toggleForms('admin')">Login as Admin</div>
+            <div class="forgot-password" onclick="forgotPassword('teacher')">Forgot Password?</div>
+        </div>
+
+        <!-- Userfront Signup Form -->
+        <div id="userfront-signup" class="signup-form">
+            <signup-form tenant-id="pn4vdymn"></signup-form>
+            <div class="toggle-button" onclick="toggleForms('admin')">Back to Login</div>
         </div>
 
         <div id="message"></div>
@@ -166,66 +136,49 @@
     <script>
         // Initialize Supabase
         const supabaseUrl = 'https://mokqpjrqgjlekuhybclo.supabase.co';
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1va3FwanJxZ2psZWt1aHliY2xvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzAzMDYxOTAsImV4cCI6MjA0NTg4MjE5MH0.ziVCEj_ZxOLg49_srT-BWPlOhzm70ZMTZc64l-n5LSU'; // Replace with your actual Supabase key
+        const supabaseKey = 'your-supabase-key'; // Replace with your actual Supabase key
         const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
-        // Listen for authentication state changes
-        supabase.auth.onAuthStateChange((event, session) => {
-            if (event === 'SIGNED_IN') {
-                // Assuming the user's role is stored in their metadata
-                const userRole = session.user.user_metadata.role; // Adjust according to your metadata setup
-
-                // Redirect based on role
-                if (userRole === 'student') {
-                    window.location.href = 'https://yourdomain.com/student-dashboard';
-                } else if (userRole === 'teacher') {
-                    window.location.href = 'https://kunta-pro.github.io/Life-hack/teacher-dashboard.html';
-                } else if (userRole === 'admin') {
-                    window.location.href = 'https://kunta-pro.github.io/Life-hack/admin-dashboard.html';
-                }
-            }
-        });
-
-        function toggleForms(role) {
-            const adminForm = document.getElementById('admin-login');
-            const teacherForm = document.getElementById('teacher-login');
-            const messageDiv = document.getElementById('message');
-
-            if (role === 'teacher') {
-                adminForm.classList.remove('active');
-                teacherForm.classList.add('active');
-            } else {
-                teacherForm.classList.remove('active');
-                adminForm.classList.add('active');
-            }
-            messageDiv.innerText = '';
-        }
-
+        // Handle Supabase login for Admin
         document.getElementById('admin-login-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const email = document.getElementById('admin-email').value;
             const password = document.getElementById('admin-password').value;
             const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-
             if (error) {
                 document.getElementById('message').innerText = error.message;
             }
         });
 
+        // Handle Supabase login for Teacher
         document.getElementById('teacher-login-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const email = document.getElementById('teacher-email').value;
             const password = document.getElementById('teacher-password').value;
             const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-
             if (error) {
                 document.getElementById('message').innerText = error.message;
             }
         });
 
+        // Toggle between forms
+        function toggleForms(form) {
+            document.getElementById('admin-login').classList.remove('active');
+            document.getElementById('teacher-login').classList.remove('active');
+            document.getElementById('userfront-signup').classList.remove('active');
+            document.getElementById(form + '-login').classList.add('active');
+        }
+
+        // Function to handle forgot password for Supabase users
         function forgotPassword(role) {
             alert(`Forgot password for ${role}!`);
         }
+
+        // Listening to Userfront login/signup state changes
+        document.addEventListener("userfront:sign-up", (e) => {
+            // Handle Userfront signup event if needed
+            alert("User signed up through Userfront!");
+        });
     </script>
 </body>
 </html>
