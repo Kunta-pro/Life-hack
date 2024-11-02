@@ -8,7 +8,8 @@
         /* Basic styles for the login form */
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            background: url('https://source.unsplash.com/1600x900/?nature,water') no-repeat center center fixed; /* Nature background */
+            background-size: cover;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -16,10 +17,10 @@
             margin: 0;
         }
         .container {
-            background: white;
+            background: rgba(255, 255, 255, 0.9); /* Semi-transparent white background */
             padding: 20px;
             border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
             width: 300px;
             position: relative; /* Positioning for animation */
             overflow: hidden; /* Ensure no overflow during animation */
@@ -65,6 +66,18 @@
             transform: translateY(0);
             pointer-events: auto; /* Allow interaction when active */
         }
+        .remember-me {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+        }
+        .forgot-password {
+            text-align: center;
+            margin-top: 10px;
+            color: #007bff;
+            text-decoration: underline;
+            cursor: pointer;
+        }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 </head>
@@ -75,9 +88,16 @@
         <!-- Admin Login Form -->
         <div id="admin-login" class="login-form active">
             <form id="admin-login-form">
+                <label for="admin-email">Admin Email</label>
                 <input type="email" id="admin-email" placeholder="Admin Email" required>
+                <label for="admin-password">Admin Password</label>
                 <input type="password" id="admin-password" placeholder="Admin Password" required>
+                <div class="remember-me">
+                    <input type="checkbox" id="admin-remember">
+                    <label for="admin-remember">Remember Me</label>
+                </div>
                 <button type="submit">Login as Admin</button>
+                <div class="forgot-password" onclick="forgotPassword('admin')">Forgot Password?</div>
             </form>
             <div class="toggle-button" onclick="toggleForms('teacher')">Login as Teacher</div>
         </div>
@@ -85,9 +105,16 @@
         <!-- Teacher Login Form -->
         <div id="teacher-login" class="login-form">
             <form id="teacher-login-form">
+                <label for="teacher-email">Teacher Email</label>
                 <input type="email" id="teacher-email" placeholder="Teacher Email" required>
+                <label for="teacher-password">Teacher Password</label>
                 <input type="password" id="teacher-password" placeholder="Teacher Password" required>
+                <div class="remember-me">
+                    <input type="checkbox" id="teacher-remember">
+                    <label for="teacher-remember">Remember Me</label>
+                </div>
                 <button type="submit">Login as Teacher</button>
+                <div class="forgot-password" onclick="forgotPassword('teacher')">Forgot Password?</div>
             </form>
             <div class="toggle-button" onclick="toggleForms('admin')">Login as Admin</div>
         </div>
@@ -113,7 +140,7 @@
                 
                 // Trigger reflow to enable animation
                 void teacherForm.offsetWidth; // This forces a reflow
-                teacherForm.class list.add('active');
+                teacherForm.classList.add('active');
             } else {
                 teacherForm.classList.remove('active');
                 adminForm.classList.remove('hidden');
@@ -164,6 +191,12 @@
                 window.location.href = '/teacher-dashboard';
             }
         });
+
+        // Handle Forgot Password
+        function forgotPassword(role) {
+            // Implement forgot password logic here
+            alert(`Forgot password for ${role}!`);
+        }
     </script>
 </body>
 </html>
