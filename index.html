@@ -13,28 +13,32 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
             margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
         }
         .container {
             background: rgba(255, 255, 255, 0.9); /* Semi-transparent white background */
-            padding: 30px; /* Increased padding */
-            border-radius: 8px; /* Slightly rounded corners */
+            padding: 20px; /* Adjusted padding for smaller screens */
+            border-radius: 8px;
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
-            width: 350px; /* Increased width */
-            position: relative; /* Positioning for animation */
-            overflow: hidden; /* Ensure no overflow during animation */
+            width: 100%;
+            max-width: 400px; /* Max width to limit expansion */
+            max-height: 90vh; /* Prevent overflow on smaller screens */
+            overflow-y: auto; /* Scroll if content exceeds viewport */
+            position: relative;
         }
         input {
             width: 100%;
-            padding: 12px; /* Increased padding for inputs */
-            margin: 10px 0;
+            padding: 10px; /* Adjusted padding */
+            margin: 8px 0;
             border: 1px solid #ccc;
             border-radius: 5px;
         }
         button {
             width: 100%;
-            padding: 12px; /* Increased padding for buttons */
+            padding: 10px;
             background-color: #28a745;
             color: white;
             border: none;
@@ -57,14 +61,14 @@
             opacity: 0;
             transform: translateY(20px);
             transition: opacity 0.3s ease, transform 0.3s ease;
-            position: absolute; /* Positioning for animation */
+            position: absolute;
             width: 100%;
-            pointer-events: none; /* Prevent interaction when not active */
+            pointer-events: none;
         }
         .login-form.active {
             opacity: 1;
             transform: translateY(0);
-            pointer-events: auto; /* Allow interaction when active */
+            pointer-events: auto;
         }
         .remember-me {
             display: flex;
@@ -80,7 +84,8 @@
         }
         @media (max-width: 400px) {
             .container {
-                width: 90%; /* Responsive width for smaller screens */
+                width: 100%; /* Use full width */
+                padding: 15px; /* Adjust padding for very small screens */
             }
         }
     </style>
@@ -104,7 +109,7 @@
                 <button type="submit">Login as Admin</button>
                 <div class="forgot-password" onclick="forgotPassword('admin')">Forgot Password?</div>
             </form>
-            <div class="toggle-button" onclick=" toggleForms('teacher')">Login as Teacher</div>
+            <div class="toggle-button" onclick="toggleForms('teacher')">Login as Teacher</div>
         </div>
 
         <!-- Teacher Login Form -->
@@ -118,7 +123,7 @@
                     <input type="checkbox" id="teacher-remember">
                     <label for="teacher-remember">Remember Me</label>
                 </div>
-                <button type="submit">Login as Teacher </button>
+                <button type="submit">Login as Teacher</button>
                 <div class="forgot-password" onclick="forgotPassword('teacher')">Forgot Password?</div>
             </form>
             <div class="toggle-button" onclick="toggleForms('admin')">Login as Admin</div>
@@ -129,8 +134,8 @@
 
     <script>
         // Initialize Supabase
-        const supabaseUrl = 'https://mokqpjrqgjlekuhybclo.supabase.co'; // Your Supabase URL
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1va3FwanJxZ2psZWt1aHliY2xvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzAzMDYxOTAsImV4cCI6MjA0NTg4MjE5MH0.ziVCEj_ZxOLg49_srT-BWPlOhzm70ZMTZc64l-n5LSU'; // Replace with your Supabase Anon Key
+        const supabaseUrl = 'https://mokqpjrqgjlekuhybclo.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1va3FwanJxZ2psZWt1aHliY2xvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzAzMDYxOTAsImV4cCI6MjA0NTg4MjE5MH0.ziVCEj_ZxOLg49_srT-BWPlOhzm70ZMTZc64l-n5LSU';
         const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
         // Toggle between Admin and Teacher login forms
@@ -141,17 +146,9 @@
 
             if (role === 'teacher') {
                 adminForm.classList.remove('active');
-                teacherForm.classList.remove('hidden');
-                
-                // Trigger reflow to enable animation
-                void teacherForm.offsetWidth; // This forces a reflow
                 teacherForm.classList.add('active');
             } else {
                 teacherForm.classList.remove('active');
-                adminForm.classList.remove('hidden');
-                
-                // Trigger reflow to enable animation
-                void adminForm.offsetWidth; // This forces a reflow
                 adminForm.classList.add('active');
             }
             messageDiv.innerText = ''; // Clear any messages
@@ -172,7 +169,6 @@
             if (error) {
                 document.getElementById('message').innerText = error.message;
             } else {
-                // Redirect to admin dashboard
                 window.location.href = '/admin-dashboard';
             }
         });
@@ -192,14 +188,12 @@
             if (error) {
                 document.getElementById('message').innerText = error.message;
             } else {
-                // Redirect to teacher dashboard
                 window.location.href = '/teacher-dashboard';
             }
         });
 
         // Handle Forgot Password
         function forgotPassword(role) {
-            // Implement forgot password logic here
             alert(`Forgot password for ${role}!`);
         }
     </script>
