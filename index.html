@@ -3,18 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Signup</title>
+    <script defer src="https://cdn.userfront.com/@userfront/toolkit@latest/dist/web-component.umd.js"></script>
     <style>
-        /* Basic styles for the login form */
+        /* Center the signup form in the middle of the page with a background */
         body {
-            font-family: Arial, sans-serif;
-            background: url('https://github.com/Kunta-pro/Kunta-pro/blob/5d3913a7f6929bfc21426341b47f61563c44d9b4/images%20(4).jpeg?raw=true') no-repeat center center fixed;
-            background-size: cover;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
+            font-family: Arial, sans-serif;
+            background: url('https://github.com/Kunta-pro/Kunta-pro/blob/5d3913a7f6929bfc21426341b47f61563c44d9b4/images%20(4).jpeg?raw=true') no-repeat center center fixed;
+            background-size: cover;
         }
         .overlay {
             position: absolute;
@@ -44,161 +45,14 @@
             margin-bottom: 15px;
             color: #ffffff;
         }
-        label {
-            display: block;
-            font-size: 0.9em;
-            text-align: left;
-            margin: 10px 0 5px;
-            color: #ffffff;
-        }
-        input {
-            width: 100%;
-            padding: 10px;
-            margin: 5px 0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 0.9em;
-            box-sizing: border-box;
-            background-color: #333; /* Darker input background */
-            color: #ffffff; /* White text for contrast */
-        }
-        button {
-            width: 100%;
-            padding: 10px;
-            margin: 15px 0;
-            background-color: #007bff;
-            color: #ffffff;
-            border: none;
-            border-radius: 5px;
-            font-size: 1em;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        button:hover {
-            background-color: #0056b3; /* Darker shade on hover */
-        }
-        #message {
-            margin-top: 10px;
-            color: #ff4c4c; /* Bright red for error messages */
-            text-align: center;
-        }
-        .toggle-button {
-            margin: 10px 0;
-            cursor: pointer;
-            color: #00aaff; /* Light blue link color */
-            text-decoration: underline;
-            text-align: center;
-            font-size: 0.9em;
-        }
-        .login-form {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.3s ease, transform 0.3s ease;
-            position: absolute;
-            width: 100%;
-            pointer-events: none;
-        }
-        .login-form.active {
-            opacity: 1;
-            transform: translateY(0);
-            pointer-events: auto;
-        }
-        .remember-me {
-            display: flex;
-            align-items: center;
-            font-size: 0.85em;
-            justify-content: flex-start;
-            color: #ffffff;
-        }
-        .forgot-password {
-            text-align: center;
-            margin-top: 5px;
-            color: #00aaff;
-            text-decoration: underline;
-            cursor: pointer;
-            font-size: 0.85em;
-        }
     </style>
 </head>
+
 <body>
     <div class="overlay"></div>
     <div class="container">
-        <h1>Login</h1>
-
-        <!-- Admin Login Form -->
-        <div id="admin-login" class="login-form active">
-            <form id="admin-login-form" onsubmit="handleLogin(event, 'admin')">
-                <label for="admin-email">Admin Email</label>
-                <input type="email" id="admin-email" placeholder="Admin Email" required>
-                <label for="admin-password">Admin Password</label>
-                <input type="password" id="admin-password" placeholder="Admin Password" required>
-                <div class="remember-me">
-                    <input type="checkbox" id="admin-remember">
-                    <label for="admin-remember">Remember Me</label>
-                </div>
-                <button type="submit">Login as Admin</button>
-                <div class="forgot-password" onclick="forgotPassword('admin')">Forgot Password?</div>
-            </form>
-            <div class="toggle-button" onclick="toggleForms('teacher')">Login as Teacher</div>
-        </div>
-
-        <!-- Teacher Login Form -->
-        <div id="teacher-login" class="login-form">
-            <form id="teacher-login-form" onsubmit="handleLogin(event, 'teacher')">
-                <label for="teacher-email">Teacher Email</label>
-                <input type="email" id="teacher-email" placeholder="Teacher Email" required>
-                <label for="teacher-password">Teacher Password</label>
-                <input type="password" id="teacher-password" placeholder="Teacher Password" required>
-                <div class="remember-me">
-                    <input type="checkbox" id="teacher-remember">
-                    <label for="teacher-remember">Remember Me</label>
-                </div>
-                <button type="submit">Login as Teacher</button>
-                <div class="forgot-password" onclick="forgotPassword('teacher')">Forgot Password?</div>
-            </form>
-            <div class="toggle-button" onclick="toggleForms('admin')">Login as Admin</div>
-        </div>
-
-        <div id="message"></div>
+        <h1>Sign Up</h1>
+        <signup-form tenant-id="pn4vdymn"></signup-form>
     </div>
-
-    <script>
-        function toggleForms(role) {
-            const adminForm = document.getElementById('admin-login');
-            const teacherForm = document.getElementById('teacher-login');
-            const messageDiv = document.getElementById('message');
-
-            if (role === 'teacher') {
-                adminForm.classList.remove('active');
-                teacherForm.classList.add('active');
-            } else {
-                teacherForm.classList.remove('active');
-                adminForm.classList.add('active');
-            }
-            messageDiv.innerText = '';
-        }
-
-        function handleLogin(event, role) {
-            event.preventDefault();
-            const email = document.getElementById(`${role}-email`).value;
-            const password = document.getElementById(`${role}-password`).value;
-            const messageDiv = document.getElementById('message');
-
-            // Placeholder login check
-            if (email && password) {
-                if (role === 'admin') {
-                    window.location.href = 'admin-dashboard.html';
-                } else {
-                    window.location.href = 'teacher-dashboard.html';
-                }
-            } else {
-                messageDiv.innerText = 'Invalid login credentials';
-            }
-        }
-
-        function forgotPassword(role) {
-            alert(`Forgot password for ${role}!`);
-        }
-    </script>
 </body>
 </html>
