@@ -18,23 +18,23 @@
         }
         .container {
             background: rgba(255, 255, 255, 0.9); /* Semi-transparent white background */
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-            width: 300px;
+            padding: 30px; /* Increased padding */
+            border-radius: 8px; /* Slightly rounded corners */
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+            width: 350px; /* Increased width */
             position: relative; /* Positioning for animation */
             overflow: hidden; /* Ensure no overflow during animation */
         }
         input {
             width: 100%;
-            padding: 10px;
+            padding: 12px; /* Increased padding for inputs */
             margin: 10px 0;
             border: 1px solid #ccc;
             border-radius: 5px;
         }
         button {
             width: 100%;
-            padding: 10px;
+            padding: 12px; /* Increased padding for buttons */
             background-color: #28a745;
             color: white;
             border: none;
@@ -78,6 +78,11 @@
             text-decoration: underline;
             cursor: pointer;
         }
+        @media (max-width: 400px) {
+            .container {
+                width: 90%; /* Responsive width for smaller screens */
+            }
+        }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 </head>
@@ -99,7 +104,7 @@
                 <button type="submit">Login as Admin</button>
                 <div class="forgot-password" onclick="forgotPassword('admin')">Forgot Password?</div>
             </form>
-            <div class="toggle-button" onclick="toggleForms('teacher')">Login as Teacher</div>
+            <div class="toggle-button" onclick=" toggleForms('teacher')">Login as Teacher</div>
         </div>
 
         <!-- Teacher Login Form -->
