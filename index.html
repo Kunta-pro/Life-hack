@@ -166,8 +166,25 @@
     <script>
         // Initialize Supabase
         const supabaseUrl = 'https://mokqpjrqgjlekuhybclo.supabase.co';
-        const supabaseKey = 'your-supabase-key';
+        const supabaseKey = 'your-supabase-key'; // Replace with your actual Supabase key
         const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+        // Listen for authentication state changes
+        supabase.auth.onAuthStateChange((event, session) => {
+            if (event === 'SIGNED_IN') {
+                // Assuming the user's role is stored in their metadata
+                const userRole = session.user.user_metadata.role; // Adjust according to your metadata setup
+
+                // Redirect based on role
+                if (userRole === 'student') {
+                    window.location.href = 'https://yourdomain.com/student-dashboard';
+                } else if (userRole === 'teacher') {
+                    window.location.href = 'https://yourdomain.com/teacher-dashboard';
+                } else if (userRole === 'admin') {
+                    window.location.href = 'https://yourdomain.com/admin-dashboard';
+                }
+            }
+        });
 
         function toggleForms(role) {
             const adminForm = document.getElementById('admin-login');
@@ -192,8 +209,6 @@
 
             if (error) {
                 document.getElementById('message').innerText = error.message;
-            } else {
-                window.location.href = '/admin-dashboard';
             }
         });
 
@@ -205,8 +220,6 @@
 
             if (error) {
                 document.getElementById('message').innerText = error.message;
-            } else {
-                window.location.href = '/teacher-dashboard';
             }
         });
 
