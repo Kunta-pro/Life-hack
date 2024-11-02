@@ -18,33 +18,42 @@
         }
         .container {
             background: rgba(255, 255, 255, 0.9);
-            padding: 20px;
-            border-radius: 8px;
+            padding: 30px 20px;
+            border-radius: 10px;
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
             width: 90%;
-            max-width: 320px;
+            max-width: 400px;
             box-sizing: border-box;
-        }
-        h1 {
-            font-size: 1.5em;
-            margin-bottom: 10px;
             text-align: center;
         }
-        label {
-            font-size: 0.9em;
+        h1 {
+            font-size: 1.6em;
+            margin-bottom: 15px;
         }
-        input, button {
+        label {
+            display: block;
+            font-size: 0.9em;
+            text-align: left;
+            margin: 10px 0 5px;
+        }
+        input {
             width: 100%;
             padding: 10px;
             margin: 5px 0;
             border: 1px solid #ccc;
             border-radius: 5px;
             font-size: 0.9em;
+            box-sizing: border-box;
         }
         button {
+            width: 100%;
+            padding: 10px;
+            margin: 15px 0;
             background-color: #28a745;
             color: white;
             border: none;
+            border-radius: 5px;
+            font-size: 1em;
             cursor: pointer;
         }
         #message {
@@ -77,6 +86,7 @@
             display: flex;
             align-items: center;
             font-size: 0.85em;
+            justify-content: flex-start;
         }
         .forgot-password {
             text-align: center;
